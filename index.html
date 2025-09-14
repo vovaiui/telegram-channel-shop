@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Доступ в приватный канал pena</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+        }
+        
+        .product-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .price {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
+            transition: transform 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .features {
+            text-align: left;
+            margin: 20px 0;
+        }
+        
+        .feature-item {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .feature-icon {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔒 Приватный канал</h1>
+            <p>Эксклюзивный контент by pena!</p>
+        </div>
+        
+        <div class="product-card">
+            <h2>Премиум доступ</h2>
+            
+            <div class="features">
+                <div class="feature-item">
+                    <span class="feature-icon">🎬</span>
+                    <span>Эксклюзивный контент</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">💬</span>
+                    <span>Закрытое сообщество</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">⚡</span>
+                    <span>Мгновенный доступ</span>
+                </div>
+            </div>
+            
+            <div class="price">75 ₽</div>
+            
+            <button class="btn" onclick="buyAccess()">🛒 Купить доступ</button>
+            <button class="btn btn-secondary" onclick="showInstructions()">❓ Как оплатить</button>
+        </div>
+    </div>
+
+    <script>
+        const webApp = window.Telegram.WebApp;
+        webApp.expand();
+        webApp.ready();
+        
+        function buyAccess() {
+            const user = webApp.initDataUnsafe.user;
+            const userId = user?.id;
+            const username = user?.username || 'пользователь';
+            
+            if (!userId) {
+                webApp.showPopup({
+                    title: "Ошибка",
+                    message: "Не удалось получить данные пользователя",
+                    buttons: [{ type: "ok" }]
+                });
+                return;
+            }
+
+            const botUsername = '@penashoptg_bot';
+            const paymentLink = `https://t.me/${botUsername}?start=pay_${userId}`;
+            
+              webApp.openTelegramLink(paymentLink);
+        }
+        
+        function showInstructions() {
+            webApp.showPopup({
+                title: "Инструкция по оплате",
+                message: "1. Нажмите 'Купить доступ'\n2. Вам откроется бот\n3. Выберите способ оплаты\n4. После оплаты получите ссылку",
+                buttons: [{ type: "ok" }]
+            });
+        }
+    </script>
+</body>
+</html>
